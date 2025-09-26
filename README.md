@@ -187,7 +187,7 @@ PUTCHAR_PROTOTYPE {
 
 
 ### With obstacle :
-<img width="821" height="643" alt="image" src="https://github.com/user-attachments/assets/a1321398-eba0-4a0b-a699-78ccddcf5173" />
+<img width="917" height="731" alt="image" src="https://github.com/user-attachments/assets/a0fffad5-ebfe-4977-af1c-529edaf0c8c8" />
 
 ## Result :
 Interfacing a  IR SENSOR and interrupt is generated using external interrupt mode , visualized on serial port 
