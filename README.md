@@ -1,7 +1,7 @@
 ###  DATE: 24-09-25
-###  NAME: KAMAL RAJ A
-###  ROLL NO :212223040082
-###  DEPARTMENT: CSE
+###  NAME: LAVANYA S
+###  ROLL NO :212223230112
+###  DEPARTMENT: AIDS
 
 
 # EXPERIMENT--04-INTERUPT-GENRATION-USING-SENSOR-AND-VISUALIZING-USING-SERIAL-MONITOR
@@ -180,17 +180,14 @@ PUTCHAR_PROTOTYPE {
 	return ch;
 }
 
-
-
 ```
-## Output screen shots of serial port utility   :
- <img width="932" height="479" alt="image" src="https://github.com/user-attachments/assets/916bed42-8e74-4dc2-9153-351fb359814c" />
+## Output :
+### Without obstacle :
+<img width="775" height="690" alt="image" src="https://github.com/user-attachments/assets/32798f8b-31be-461a-b9cd-84bb2487cb2b" />
 
- 
- ## Circuit board :
- 
- <img width="453" height="630" alt="image" src="https://github.com/user-attachments/assets/2bf318a6-f152-41ba-a9fe-0fd3e7e4ddf5" />
 
- 
+### With obstacle :
+<img width="821" height="643" alt="image" src="https://github.com/user-attachments/assets/a1321398-eba0-4a0b-a699-78ccddcf5173" />
+
 ## Result :
 Interfacing a  IR SENSOR and interrupt is generated using external interrupt mode , visualized on serial port 
