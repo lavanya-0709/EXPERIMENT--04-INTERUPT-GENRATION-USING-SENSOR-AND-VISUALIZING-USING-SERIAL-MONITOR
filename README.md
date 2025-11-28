@@ -1,4 +1,4 @@
-###  DATE: 24-09-25
+###  DATE: 
 ###  NAME: LAVANYA S
 ###  ROLL NO :212223230112
 ###  DEPARTMENT: AIDS
@@ -139,14 +139,8 @@ The diagram below shows how the GPIO pins are connected to the 16 interrupt line
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include"stdbool.h"
-#include<stdio.h>
-bool IRSENSOR;
-void IRPAIR();
-static void MX_GPIO_Init(void);
-#if defined(__ICCARM__) || defined(__ARMCC_VERSION)
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#elif defined(__GNUC__)
+#include "stdio.h"
+#if defined(__GNUC__)
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 #endif
 
@@ -162,7 +156,6 @@ static void MX_GPIO_Init(void);
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -196,7 +189,6 @@ static void MX_USART2_UART_Init(void);
   */
 int main(void)
 {
-
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -228,32 +220,22 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  IRPAIR();
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
-void IRPAIR()
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-IRSENSOR = HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_4);
-if(IRSENSOR==0)
-
-{
-HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
-printf("Obstacle Detected\n");
-HAL_Delay(1000);
+	if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_4)==1)
+	{
+		printf("INTERRUPT GENERATED\n");
+	}
 }
-else
-{
-HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
-printf("Obstacle Not Detected\n");
-HAL_Delay(1000);
-}
-}
-
-PUTCHAR_PROTOTYPE
-{
-  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
-  return ch;
+PUTCHAR_PROTOTYPE{
+	HAL_UART_Transmit(&huart2, (uint8_t*)&ch,1,0xFFFF);
+	return ch;
 }
 
 /**
@@ -268,8 +250,7 @@ void SystemClock_Config(void)
   /** Configure the main internal regulator output voltage
   */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
-
-  /** Initializes the CPU, AHB and APB buses clocks
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI;
   RCC_OscInitStruct.MSIState = RCC_MSI_ON;
@@ -280,7 +261,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-
   /** Configure the SYSCLKSource, HCLK, PCLK1 and PCLK2 clocks dividers
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK3|RCC_CLOCKTYPE_HCLK
@@ -314,7 +294,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 9600;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -354,33 +334,21 @@ static void MX_USART2_UART_Init(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  /* USER CODE BEGIN MX_GPIO_Init_1 */
-
-  /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
-
   /*Configure GPIO pin : PB4 */
   GPIO_InitStruct.Pin = GPIO_PIN_4;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PB5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_5;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN MX_GPIO_Init_2 */
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_IRQn);
 
-  /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -401,7 +369,8 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-#ifdef USE_FULL_ASSERT
+
+#ifdef  USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.
@@ -421,9 +390,15 @@ void assert_failed(uint8_t *file, uint32_t line)
 ```
 
 ## Output :
+# SERIAL PORT:
+<img width="961" height="433" alt="image" src="https://github.com/user-attachments/assets/32a2555f-b777-4d84-8330-867d8c8120d0" />
 
-![WhatsApp Image 2025-11-03 at 10 24 49_ce055109](https://github.com/user-attachments/assets/10a90101-6121-4dba-a75a-ab02a850d600)
-<img width="1705" height="835" alt="image" src="https://github.com/user-attachments/assets/c55a1fe4-1a6d-4c9d-a44f-1a45b51bf87f" />
+## Circuit board :
+### Obstacle not detected
+<img width="512" height="308" alt="image" src="https://github.com/user-attachments/assets/3bf20371-0876-46e8-b5dd-614e78401328" />
+
+### Obstacle detected
+<img width="500" height="259" alt="image" src="https://github.com/user-attachments/assets/22684cbb-fa67-4d72-ae5d-1e7664acefde" />
 
 
 ## Result :
