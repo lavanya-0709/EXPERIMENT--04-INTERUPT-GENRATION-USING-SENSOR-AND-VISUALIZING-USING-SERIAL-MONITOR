@@ -1,8 +1,8 @@
-###  DATE: 
+###  DATE: 24.09.2025
 
-###  NAME: 
-###  ROLL NO :
-###  DEPARTMENT: 
+###  NAME: LAVANYA S
+###  ROLL NO :212223230112
+###  DEPARTMENT: AIDS
 
 
 # EXPERIMENT--04-INTERUPT-GENRATION-USING-SENSOR-AND-VISUALIZING-USING-SERIAL-MONITOR
@@ -119,14 +119,83 @@ The diagram below shows how the GPIO pins are connected to the 16 interrupt line
 
 ## STM 32 CUBE PROGRAM :
 
+```
 
+
+#include "main.h"
+#include "stdio.h"
+#if defined (__ICCARM__) || defined (_ARMCC_VERSION)
+#define PUTCHAR_PROTOTYPE int fputc(int ch,FILE *f);
+#elif defined(__GNUC__)
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#endif
+
+
+
+int main(void)
+{
+  
+  HAL_Init();
+
+  
+  SystemClock_Config();
+
+  
+  MX_GPIO_Init();
+  MX_USART2_UART_Init();
+  
+  while (1)
+  {
+
+  }
+  while(1){
+      if(interrupt_triggered){
+          printf("INTERRUPT GENERATED\n");
+          HAL_Delay(100);  // Delay here is safe
+          interrupt_triggered = 0;
+      }
+  }
+  /* USER CODE END 3 */
+}
+
+
+//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+//	if(HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_4)==0){
+//		printf("INTERRUPT GENERATED\n");
+//		HAL_Delay(100);
+//	}else{
+//		printf("INTERRUPT NOT GENERATED\n");
+//		HAL_Delay(100);
+//	}
+//}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+    if(GPIO_Pin == GPIO_PIN_4){
+        if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == 0){
+            interrupt_triggered = 1;
+        }
+    }
+}
+
+PUTCHAR_PROTOTYPE {
+	HAL_UART_Transmit(&huart2,(uint8_t*)&ch,1,0xFFFF);
+	return ch;
+}
+
+
+
+```
 
 ## Output screen shots of serial port utility   :
- 
+
+
+ <img width="932" height="479" alt="image" src="https://github.com/user-attachments/assets/a369520c-abdf-45de-bba4-924db6c26eb6" />
+
  
  ## Circuit board :
  
- 
+ <img width="502" height="708" alt="image" src="https://github.com/user-attachments/assets/df0702b2-5eed-4cf3-a965-88828f603f42" />
+
  
 ## Result :
 Interfacing a  IR SENSOR and interrupt is generated using external interrupt mode , visualized on serial port 
