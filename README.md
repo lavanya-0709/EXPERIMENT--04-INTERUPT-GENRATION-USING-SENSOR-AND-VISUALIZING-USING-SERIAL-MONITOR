@@ -1,6 +1,6 @@
-###  NAME: LAVANYA S
-###  ROLL NO :212223230112
-###  DEPARTMENT: AIDS
+###  NAME:LAVANYA S
+###  ROLL NO : 212223230112
+###  DEPARTMENT: B.Tech-AIDS
 
 
 # EXPERIMENT--04-INTERUPT-GENRATION-USING-SENSOR-AND-VISUALIZING-USING-SERIAL-MONITOR
@@ -116,8 +116,7 @@ The diagram below shows how the GPIO pins are connected to the 16 interrupt line
   
 
 ## STM 32 CUBE PROGRAM :
-
-```
+```c
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -138,7 +137,13 @@ The diagram below shows how the GPIO pins are connected to the 16 interrupt line
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include"stdbool.h"
 #include "stdio.h"
+bool IRSENSOR;
+void IRPAIR();
+static void MX_GPIO_Init(void);
+//#if defined(__ICCARM__) || defined(__ARMCC_VERSION)
+//#define PUTCHAR_PROTOTYPE int fputc(int ch,FILE *f)
 #if defined(__GNUC__)
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 #endif
@@ -218,24 +223,34 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
+    {
+  	  IRPAIR();
+    }
+    /* USER CODE END 3 */
   }
-  /* USER CODE END 3 */
-}
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_4)==1)
-	{
-		printf("INTERRUPT GENERATED\n");
-	}
-}
-PUTCHAR_PROTOTYPE{
-	HAL_UART_Transmit(&huart2, (uint8_t*)&ch,1,0xFFFF);
-	return ch;
-}
+  void IRPAIR()
+  {
+  IRSENSOR = HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_4);
+  if(IRSENSOR==0)
+  {
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+  	printf("Obstacle Detected\n");
+  HAL_Delay(1000);
+  //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+  //HAL_Delay(1000);
+  }
+  else
+  {
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+  	printf("Obstacle Not Detected\n");
+  HAL_Delay(1000);
+  }
+  }
+  PUTCHAR_PROTOTYPE
+  {
+  HAL_UART_Transmit(&huart2,(uint8_t*)&ch,1,0xFFFF);
+  return ch;
+  }
 
 /**
   * @brief System Clock Configuration
@@ -293,7 +308,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 9600;
+  huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -338,15 +353,21 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
+
   /*Configure GPIO pin : PB4 */
   GPIO_InitStruct.Pin = GPIO_PIN_4;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI4_IRQn);
+  /*Configure GPIO pin : PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
@@ -387,10 +408,9 @@ void assert_failed(uint8_t *file, uint32_t line)
 #endif /* USE_FULL_ASSERT */
 
 ```
-
-## Output :
-# SERIAL PORT:
+## Output screen shots of serial port utility   :
 <img width="961" height="433" alt="image" src="https://github.com/user-attachments/assets/32a2555f-b777-4d84-8330-867d8c8120d0" />
+
 
 ## Circuit board :
 ### Obstacle not detected
@@ -399,6 +419,6 @@ void assert_failed(uint8_t *file, uint32_t line)
 ### Obstacle detected
 <img width="500" height="259" alt="image" src="https://github.com/user-attachments/assets/22684cbb-fa67-4d72-ae5d-1e7664acefde" />
 
-
+ 
 ## Result :
 Interfacing a  IR SENSOR and interrupt is generated using external interrupt mode , visualized on serial port 
